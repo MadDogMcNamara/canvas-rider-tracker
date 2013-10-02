@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+
+  "name": "Canvas Rider Tracker",
+  "description": "Tracks which tracks you've played",
+  "version": "0.1",
+
+  "permissions": [
+    "storage"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["http://canvasrider.com/tracks/*"],
+      "js": ["jquery-2.0.3.min.js", "trackdb.js", "page.js"],
+      "css": ["page.css"]
+    }
+  ],
+
+  "background": {
+    "scripts": ["trackdb.js"]
+  },
+
+  "web_accessible_resources": [
+    "jquery-2.0.3.min.map",
+    "inject.js",
+    "trackdb.js"
+  ]
+}
+
