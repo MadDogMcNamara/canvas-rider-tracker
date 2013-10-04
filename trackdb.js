@@ -50,4 +50,61 @@ TrackDB = {
       cb();
     });
   },
+
+  getCompleteTracks: function(cb) {
+    chrome.storage.local.get(null,function(res){
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError());
+        cb([]);
+      } else {
+        var tracks = [];
+        for (var x in res) {
+          if (res[x]) {
+            tracks.push(x);
+          }
+        }
+        if (cb) {
+          cb(tracks);
+        }
+      }
+    });
+  },
+
+  getIncompleteTracks: function(cb) {
+    chrome.storage.local.get(null,function(res){
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError());
+        cb([]);
+      } else {
+        var tracks = [];
+        for (var x in res) {
+          if (!res[x]) {
+            tracks.push(x);
+          }
+        }
+        if (cb) {
+          cb(tracks);
+        }
+      }
+    });
+  },
+
+  loadTrackThumbnail: function(tracknum, cb) {
+    var img = new Image();
+    var loaded = false;
+
+    img.src = "http://canvasrider.com/images/thumbnails/" + tracknum;
+    img.onload = function() {
+      if (!loaded) {
+        loaded = true;
+        cb(img);
+      }
+    };
+
+    if (img.complete && !loaded) {
+      loaded = true;
+      cb(img);
+    }
+  },
 };
+

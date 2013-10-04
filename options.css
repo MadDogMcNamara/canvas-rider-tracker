@@ -1,0 +1,9 @@
+.imgcontainer {
+  width: 250px;
+  height: 150px;
+  border: 2px solid black;
+  -webkit-border-radius: 10px;
+  padding: 0;
+  margin: 10px;
+  display: inline-block;
+}
