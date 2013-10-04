@@ -12,19 +12,18 @@
   "content_scripts": [
     {
       "matches": ["http://canvasrider.com/tracks/*"],
-      "js": ["jquery-2.0.3.min.js", "trackdb.js", "page.js"],
+      "js": ["jquery-2.0.3.min.js", "page.js"],
       "css": ["page.css"]
     }
   ],
 
   "background": {
-    "scripts": ["trackdb.js"]
+    "scripts": ["trackdb.js", "background.js"]
   },
 
   "web_accessible_resources": [
     "jquery-2.0.3.min.map",
-    "inject.js",
-    "trackdb.js"
+    "inject.js"
   ]
 }
 
