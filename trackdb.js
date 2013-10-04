@@ -1,61 +1,53 @@
+/*
+  TrackDB Format:
+
+    chrome.storage.local:
+      {
+        "<tracknum>" : <date completed>,
+        ...
+      }
+*/
+
 TrackDB = {
-  // Constants
-  __dbname: "tracks",
-  __dbversion: "1.0",
-  __dbdesc: "",
-  __dbsize: 1024*1024*5, // 5MB
-  // sql
-  __sql_createtable: "CREATE TABLE IF NOT EXISTS tracks(tracknum INTEGER PRIMARY KEY ASC, completed TIMESTAMP DEFAULT NULL)",
-  __sql_gettrack: "SELECT * FROM tracks WHERE tracknum = ?",
-  __sql_addtrack: "INSERT INTO tracks (tracknum) VALUES (?)",
-  __sql_completetrack: "UPDATE tracks SET completed = datetime() WHERE tracknum = ?",
-
-
-  _db: null,
-
-  _dberror: function(tx,err) {
-    console.log(err);
-  },
-
-  _ensuredb: function() {
-    var t = this;
-    if (t._db == null) {
-      t._db = openDatabase(t.__dbname, t.__dbversion, t.__dbdesc, t.__dbsize);
-      t._db.transaction(function(tx){
-        tx.executeSql(t.__sql_createtable,[],null,t._dberror);
-      });
-    }
-  },
 
   getTrack: function(tracknum,cb) {
-    var t = this;
-    t._ensuredb();
-
-    t._db.transaction(function(tx){
-      tx.executeSql(t.__sql_gettrack,[tracknum],function(tx,rs){
-        var res = 0;
-        if (rs.rows.length > 0) {
-          res = (rs.rows.item(0).completed != null) ? 2 : 1;
+    var key = tracknum + "";
+    chrome.storage.local.get(key,function(res){
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError());
+        cb(0);
+      } else {
+        if (key in res) {
+          if (res[key]) {
+            cb(2);
+          } else {
+            cb(1);
+          }
         } else {
-          tx.executeSql(t.__sql_addtrack,[tracknum],null,t._dberror);
+          var obj = {};
+          obj[key] = null;
+          chrome.storage.local.set(obj, function(){
+            if (chrome.runtime.lastError) {
+              console.log(chrome.runtime.lastError());
+              cb(0);
+            } else {
+              cb(0);
+            }
+          });
         }
-        if (cb != null) {
-          cb(res);
-        }
-      },t._dberror);
+      }
     });
   },
 
   completeTrack: function(tracknum,cb) {
-    var t = this;
-    t._ensuredb();
-
-    t._db.transaction(function(tx){
-      tx.executeSql(t.__sql_completetrack,[tracknum],function(tx){
-        if (cb != null) {
-          cb();
-        }
-      },t._dberror);
+    var key = tracknum + "";
+    var obj = {};
+    obj[key] = new Date();
+    chrome.storage.local.set(obj,function(){
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError());
+      }
+      cb();
     });
   },
 };
