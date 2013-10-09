@@ -29,3 +29,6 @@ Bk.prototype.DC = function() {
   }
 })(alert);
 
+if (window.location.search == "?finish") {
+  DQ();
+}
