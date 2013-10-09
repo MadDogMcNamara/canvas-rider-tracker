@@ -21,8 +21,11 @@ Bk.prototype.DC = function() {
   this.oldDC();
 };
 
-alert = function(x) {
-  if (x != "Track complete!") {
-    alert(x);
+(function(oldAlert){
+  alert = function(x) {
+    if (x != "Track complete!") {
+      oldAlert(x);
+    }
   }
-};
+})(alert);
+
