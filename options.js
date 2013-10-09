@@ -27,3 +27,14 @@ TrackDB.getIncompleteTracks(function(tracks){
     })(tracks[x]);
   }
 });
+
+function finisher() {
+  TrackDB.getFirstIncomplete(function(track){
+    window.location = "http://canvasrider.com/tracks/" + track + "?finish";
+  });
+}
+
+window.addEventListener("load", function(){
+  document.getElementById("finisher").addEventListener("click", finisher, false);
+},false)
+
