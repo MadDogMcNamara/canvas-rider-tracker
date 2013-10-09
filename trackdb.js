@@ -89,6 +89,26 @@ TrackDB = {
     });
   },
 
+  getFirstIncomplete: function(cb) {
+    chrome.storage.local.get(null,function(res){
+      if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError());
+        cb(0);
+      } else {
+        var track = 0;
+        for (var x in res) {
+          if (!res[x]) {
+            track = x;
+            break;
+          }
+        }
+        if (cb) {
+          cb(track);
+        }
+      }
+    });
+  },
+
   loadTrackThumbnail: function(tracknum, cb) {
     var img = new Image();
     var loaded = false;
@@ -107,4 +127,5 @@ TrackDB = {
     }
   },
 };
+
 

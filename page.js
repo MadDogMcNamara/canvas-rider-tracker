@@ -9,6 +9,8 @@ function inject(script) {
   (document.head||document.documentElement).appendChild(s);
 }
 
+var finish = window.location.search == "?finish";
+
 var span = document.createElement("span");
 span.className = "status";
 document.body.appendChild(span);
@@ -33,8 +35,11 @@ $(document).ready(function(){
 window.addEventListener("message", function(event){
   var data = event.data;
   if (data.type && data.type == "COMPLETE") {
-    chrome.runtime.sendMessage({"complete":track},function(response){
-      // TODO: do something?
+    chrome.runtime.sendMessage({"complete":track,"finish":finish},function(response){
+      if (finish && response.next && response.next != 0) {
+        window.location = "http://canvasrider.com/tracks/" + response.next + "?finish";
+      }
     });
   }
 }, false);
+
