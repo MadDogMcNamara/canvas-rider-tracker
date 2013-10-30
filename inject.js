@@ -32,3 +32,8 @@ Bk.prototype.DC = function() {
 if (window.location.search == "?finish") {
   DQ();
 }
+
+if ( C.BU == 0 )
+{
+  notifyComplete();
+}
