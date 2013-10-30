@@ -33,7 +33,6 @@ if (window.location.search == "?finish") {
   DQ();
 }
 
-if ( C.BU == 0 )
-{
+if (C.BU == 0){
   notifyComplete();
 }
